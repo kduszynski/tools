@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leasing Calculator</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        form { max-width: 400px; margin: auto; }
+        input, button { width: 100%; padding: 10px; margin: 5px 0; }
+        .result { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Leasing Calculator</h1>
+    <form id="leasingForm">
+        <input type="text" id="carName" placeholder="Car Name" required>
+        <input type="number" id="netAmount" placeholder="Net Amount" required>
+        <input type="number" id="initialPayment" placeholder="Initial Payment" required>
+        <input type="number" id="tenors" placeholder="Tenors" required>
+        <input type="number" id="endValue" placeholder="End Value" required>
+        <input type="number" id="instalmentValue" placeholder="Instalment Value" required>
+        <button type="submit">Calculate</button>
+    </form>
+    <div class="result" id="result"></div>
+    <script src="leasing_calculator.js"></script>
+    <script>
+        document.getElementById('leasingForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const carName = document.getElementById('carName').value;
+            const netAmount = parseFloat(document.getElementById('netAmount').value);
+            const initialPayment = parseFloat(document.getElementById('initialPayment').value);
+            const tenors = parseInt(document.getElementById('tenors').value);
+            const endValue = parseFloat(document.getElementById('endValue').value);
+            const instalmentValue = parseFloat(document.getElementById('instalmentValue').value);
+
+            const calculator = new LeasingCalculator(carName, netAmount, initialPayment, tenors, endValue, instalmentValue);
+            const totalCost = calculator.calculateTotalCost();
+            const rrso = calculator.calculateRRSO();
+
+            document.getElementById('result').innerHTML = `
+                <h2>Results</h2>
+                <p>Total Cost: ${totalCost.toFixed(2)}</p>
+                <p>RRSO: ${rrso.toFixed(2)}%</p>
+            `;
+        });
+    </script>
+</body>
+</html> 
