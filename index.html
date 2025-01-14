@@ -9,6 +9,9 @@
         form { max-width: 400px; margin: auto; }
         input, button { width: 100%; padding: 10px; margin: 5px 0; }
         .result { margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #f2f2f2; }
     </style>
 </head>
 <body>
@@ -23,6 +26,7 @@
         <button type="submit">Calculate</button>
     </form>
     <div class="result" id="result"></div>
+    <div id="historyTable"></div>
     <script src="leasing_calculator.js"></script>
     <script>
         document.getElementById('leasingForm').addEventListener('submit', function(event) {
@@ -35,14 +39,52 @@
             const instalmentValue = parseFloat(document.getElementById('instalmentValue').value);
 
             const calculator = new LeasingCalculator(carName, netAmount, initialPayment, tenors, endValue, instalmentValue);
+            addToHistory(calculator);
+            
             const totalCost = calculator.calculateTotalCost();
             const rrso = calculator.calculateRRSO();
 
             document.getElementById('result').innerHTML = `
-                <h2>Results</h2>
+                <h2>Latest Result</h2>
                 <p>Total Cost: ${totalCost.toFixed(2)}</p>
                 <p>RRSO: ${rrso.toFixed(2)}%</p>
             `;
+
+            // Display history table
+            const historyHTML = `
+                <h2>All Calculations</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Car Name</th>
+                            <th>Net Amount</th>
+                            <th>Initial Payment</th>
+                            <th>Tenors</th>
+                            <th>End Value</th>
+                            <th>Instalment</th>
+                            <th>Total Cost</th>
+                            <th>RRSO (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${[...calculationHistory]
+                            .sort((a, b) => a.calculateRRSO() - b.calculateRRSO())
+                            .map(calc => `
+                                <tr>
+                                    <td>${calc.carName}</td>
+                                    <td>${calc.netAmount.toFixed(2)}</td>
+                                    <td>${calc.initialPayment.toFixed(2)}</td>
+                                    <td>${calc.tenors}</td>
+                                    <td>${calc.endValue.toFixed(2)}</td>
+                                    <td>${calc.instalmentValue.toFixed(2)}</td>
+                                    <td>${calc.calculateTotalCost().toFixed(2)}</td>
+                                    <td>${calc.calculateRRSO().toFixed(2)}</td>
+                                </tr>
+                            `).join('')}
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('historyTable').innerHTML = historyHTML;
         });
     </script>
 </body>

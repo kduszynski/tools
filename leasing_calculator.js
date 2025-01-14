@@ -37,6 +37,14 @@ function printLeasingTable(calculators) {
     calculators.forEach(calculator => calculator.printConditions());
 }
 
+// Add at the end, before example usage
+let calculationHistory = [];
+
+function addToHistory(calculator) {
+    calculationHistory.push(calculator);
+    return calculationHistory;
+}
+
 // Example usage
 const toyotaNetValue = Math.round(94000 / 1.23 * 100) / 100;
 const calculators = [
