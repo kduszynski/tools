@@ -124,4 +124,118 @@ tr:hover {
 label {
   color: var(--text-secondary);
   font-size: 0.9rem;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+  background-color: #2196F3;
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(26px);
+}
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+  margin: 15px 0;
+}
+
+.toggle-label {
+  margin-left: 10px;
+  font-weight: 500;
+}
+
+.tax-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tax-controls .form-group {
+  flex: 1;
+  margin: 0;
+}
+
+.tax-controls .toggle-container {
+  margin: 0;
+  min-width: 200px;
+}
+
+.delete-btn {
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border: none;
+  transition: color 0.2s;
+}
+
+.delete-btn:hover {
+  color: #ff4444;
+}
+
+td.actions {
+  width: 50px;
+  text-align: center;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.reuse-btn {
+  background: transparent;
+  color: var(--accent);
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border: none;
+  transition: color 0.2s;
+}
+
+.reuse-btn:hover {
+  color: #8489ff;
 } 
