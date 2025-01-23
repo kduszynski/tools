@@ -49,12 +49,30 @@ function App() {
     <div className="App">
       <h1>Leasing Calculator</h1>
       <form onSubmit={handleSubmit}>
-        <input name="carName" type="text" placeholder="Car Name" required />
-        <input name="netAmount" type="number" placeholder="Net Amount" required />
-        <input name="initialPayment" type="number" placeholder="Initial Payment" required />
-        <input name="tenors" type="number" placeholder="Tenors" required />
-        <input name="endValue" type="number" placeholder="End Value" required />
-        <input name="instalmentValue" type="number" placeholder="Instalment Value" required />
+        <div className="form-group">
+          <label>Car Name</label>
+          <input name="carName" type="text" defaultValue="Tesla Model 3" required />
+        </div>
+        <div className="form-group">
+          <label>Net Amount</label>
+          <input name="netAmount" type="number" defaultValue="200000" required />
+        </div>
+        <div className="form-group">
+          <label>Initial Payment</label>
+          <input name="initialPayment" type="number" defaultValue="20000" required />
+        </div>
+        <div className="form-group">
+          <label>Tenors (months)</label>
+          <input name="tenors" type="number" defaultValue="36" required />
+        </div>
+        <div className="form-group">
+          <label>End Value</label>
+          <input name="endValue" type="number" defaultValue="80000" required />
+        </div>
+        <div className="form-group">
+          <label>Instalment Value</label>
+          <input name="instalmentValue" type="number" defaultValue="3500" required />
+        </div>
         <button type="submit">Calculate</button>
       </form>
 
