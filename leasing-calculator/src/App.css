@@ -305,22 +305,24 @@ td.actions {
   td {
     display: grid;
     grid-template-columns: 40% 60%;
+    align-items: center;
     padding: 0.5rem;
     border: none;
-    text-align: right;
   }
 
   td::before {
     content: attr(data-label);
-    float: left;
     font-weight: bold;
-    text-align: left;
     color: var(--accent);
   }
 
   td.actions {
-    display: flex;
-    justify-content: flex-end;
-    width: auto;
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .action-buttons {
+    width: 100%;
+    justify-content: space-around;
   }
 } 
