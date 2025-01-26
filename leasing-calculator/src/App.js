@@ -267,7 +267,7 @@ function App() {
                 />
                 <span className="toggle-slider"></span>
               </label>
-              <span className="toggle-label">Use Gross (VAT)</span>
+              <span className="toggle-label">Show Gross Values</span>
             </div>
             {useGross && (
               <div className="form-group">
@@ -279,11 +279,11 @@ function App() {
         </div>
         <div className="form-group">
           <label>Net Amount</label>
-          <input name="netAmount" type="number" defaultValue="200000" required />
+          <input name="netAmount" type="number" defaultValue="200000" step="0.01" required />
         </div>
         <div className="form-group">
           <label>Initial Payment</label>
-          <input name="initialPayment" type="number" defaultValue="20000" step="1000" required />
+          <input name="initialPayment" type="number" defaultValue="20000" step="0.01" required />
         </div>
         <div className="form-group">
           <label>Tenors (months)</label>
@@ -291,11 +291,11 @@ function App() {
         </div>
         <div className="form-group">
           <label>End Value</label>
-          <input name="endValue" type="number" defaultValue="80000" step="1000" required />
+          <input name="endValue" type="number" defaultValue="80000" step="0.01" required />
         </div>
         <div className="form-group">
           <label>Instalment Value</label>
-          <input name="instalmentValue" type="number" defaultValue="3500" required />
+          <input name="instalmentValue" type="number" defaultValue="3500" step="0.01" required />
         </div>
         <button type="submit">Calculate</button>
       </form>
@@ -326,11 +326,15 @@ function App() {
               <tr>
                 <th>Date</th>
                 <th>Name</th>
-                <th>{useGross ? 'Gross Amount' : 'Net Amount'}</th>
-                <th>{useGross ? 'Gross Initial' : 'Initial Payment'}</th>
+                <th>Net Amount</th>
+                {useGross && <th>Gross Amount</th>}
+                <th>Initial Payment</th>
+                {useGross && <th>Gross Initial</th>}
                 <th>Tenors</th>
-                <th>{useGross ? 'Gross End Value' : 'End Value'}</th>
-                <th>{useGross ? 'Gross Instalment' : 'Instalment'}</th>
+                <th>End Value</th>
+                {useGross && <th>Gross End Value</th>}
+                <th>Instalment</th>
+                {useGross && <th>Gross Instalment</th>}
                 {isCompany && <th>Instalment After Deductions</th>}
                 <th>Total Cost</th>
                 <th>RRSO (%)</th>
@@ -344,11 +348,15 @@ function App() {
                   <tr key={index}>
                     <td data-label="Date">{calc.getFormattedDate()}</td>
                     <td data-label="Name">{calc.name}</td>
-                    <td data-label={useGross ? 'Gross Amount' : 'Net Amount'}>{calc.useGross ? calc.getGrossAmount().toFixed(2) : calc.netAmount.toFixed(2)}</td>
-                    <td data-label={useGross ? 'Gross Initial' : 'Initial Payment'}>{calc.useGross ? calc.getGrossInitialPayment().toFixed(2) : calc.initialPayment.toFixed(2)}</td>
+                    <td data-label="Net Amount">{calc.netAmount.toFixed(2)}</td>
+                    {useGross && <td data-label="Gross Amount">{calc.getGrossAmount().toFixed(2)}</td>}
+                    <td data-label="Initial Payment">{calc.initialPayment.toFixed(2)}</td>
+                    {useGross && <td data-label="Gross Initial">{calc.getGrossInitialPayment().toFixed(2)}</td>}
                     <td data-label="Tenors">{calc.tenors}</td>
-                    <td data-label={useGross ? 'Gross End Value' : 'End Value'}>{calc.useGross ? calc.getGrossEndValue().toFixed(2) : calc.endValue.toFixed(2)}</td>
-                    <td data-label={useGross ? 'Gross Instalment' : 'Instalment'}>{calc.useGross ? calc.getGrossInstalment().toFixed(2) : calc.instalmentValue.toFixed(2)}</td>
+                    <td data-label="End Value">{calc.endValue.toFixed(2)}</td>
+                    {useGross && <td data-label="Gross End Value">{calc.getGrossEndValue().toFixed(2)}</td>}
+                    <td data-label="Instalment">{calc.instalmentValue.toFixed(2)}</td>
+                    {useGross && <td data-label="Gross Instalment">{calc.getGrossInstalment().toFixed(2)}</td>}
                     {isCompany && <td data-label="Instalment After Deductions">{calc.calculateDeductedInstalment()?.toFixed(2)}</td>}
                     <td data-label="Total Cost">{calc.calculateTotalCost().toFixed(2)}</td>
                     <td data-label="RRSO (%)">{calc.calculateRRSO().toFixed(2)}</td>
