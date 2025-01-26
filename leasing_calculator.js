@@ -1,6 +1,6 @@
 class LeasingCalculator {
-    constructor(carName, netAmount, initialPayment, tenors, endValue, instalmentValue) {
-        this.carName = carName;
+    constructor(name, netAmount, initialPayment, tenors, endValue, instalmentValue) {
+        this.name = name;
         this.netAmount = netAmount;
         this.initialPayment = initialPayment;
         this.tenors = tenors;
@@ -21,7 +21,11 @@ class LeasingCalculator {
     }
 
     printConditions() {
-        console.log(`${this.carName.padEnd(15)} ${this.netAmount.toFixed(2).padEnd(10)} ${this.initialPayment.toFixed(2).padEnd(15)} ${this.tenors.toString().padEnd(7)} ${this.endValue.toFixed(2).padEnd(10)} ${this.instalmentValue.toFixed(2).padEnd(15)} ${this.calculateRRSO().toFixed(2).padEnd(10)}`);
+        console.log(`${this.name.padEnd(15)} ${this.netAmount.toFixed(2).padEnd(10)} ${this.initialPayment.toFixed(2).padEnd(15)} ${this.tenors.toString().padEnd(7)} ${this.endValue.toFixed(2).padEnd(10)} ${this.instalmentValue.toFixed(2).padEnd(15)} ${this.calculateRRSO().toFixed(2).padEnd(10)}`);
+    }
+
+    toString() {
+        return `${this.name.padEnd(15)} ${this.netAmount.toFixed(2).padEnd(10)} ${this.initialPayment.toFixed(2).padEnd(15)} ${this.tenors.toString().padEnd(7)} ${this.endValue.toFixed(2).padEnd(10)} ${this.instalmentValue.toFixed(2)}`;
     }
 }
 

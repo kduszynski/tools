@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { PDFDownloadLink, Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer';
 import './App.css';
 
 const CURRENT_VERSION = 1;
@@ -6,9 +7,9 @@ const CURRENT_VERSION = 1;
 class LeasingCalculator {
   static VERSION = CURRENT_VERSION;
 
-  constructor(carName, netAmount, initialPayment, tenors, endValue, instalmentValue, useGross = false, vatRate = 0, isCompany = false, deductionPercentage = 50) {
+  constructor(name, netAmount, initialPayment, tenors, endValue, instalmentValue, useGross = false, vatRate = 0, isCompany = false, deductionPercentage = 50) {
     this.version = CURRENT_VERSION;
-    this.carName = carName;
+    this.name = name;
     this.netAmount = netAmount;
     this.initialPayment = initialPayment;
     this.tenors = tenors;
@@ -93,6 +94,50 @@ function migrateCalculation(calc) {
   return calc;
 }
 
+const styles = StyleSheet.create({
+  page: { padding: 20 },
+  table: { display: 'flex', width: 'auto', borderStyle: 'solid', borderWidth: 1, borderRightWidth: 0, borderBottomWidth: 0 },
+  tableRow: { margin: 'auto', flexDirection: 'row' },
+  tableCol: { width: '10%', borderStyle: 'solid', borderWidth: 1, borderLeftWidth: 0, borderTopWidth: 0 },
+  tableCell: { margin: 2, fontSize: 8 },
+  tableHeader: { margin: 2, fontSize: 8, fontWeight: 'bold' }
+});
+
+const CalculationsPDF = ({ calculations, useGross, isCompany }) => (
+  <Document>
+    <Page size="A4" orientation="landscape" style={styles.page}>
+      <View style={styles.table}>
+        <View style={styles.tableRow}>
+          <View style={styles.tableCol}><Text style={styles.tableHeader}>Date</Text></View>
+          <View style={styles.tableCol}><Text style={styles.tableHeader}>Name</Text></View>
+          <View style={styles.tableCol}><Text style={styles.tableHeader}>{useGross ? 'Gross Amount' : 'Net Amount'}</Text></View>
+          <View style={styles.tableCol}><Text style={styles.tableHeader}>{useGross ? 'Gross Initial' : 'Initial Payment'}</Text></View>
+          <View style={styles.tableCol}><Text style={styles.tableHeader}>Tenors</Text></View>
+          <View style={styles.tableCol}><Text style={styles.tableHeader}>{useGross ? 'Gross End Value' : 'End Value'}</Text></View>
+          <View style={styles.tableCol}><Text style={styles.tableHeader}>{useGross ? 'Gross Instalment' : 'Instalment'}</Text></View>
+          {isCompany && <View style={styles.tableCol}><Text style={styles.tableHeader}>Instalment After Deductions</Text></View>}
+          <View style={styles.tableCol}><Text style={styles.tableHeader}>Total Cost</Text></View>
+          <View style={styles.tableCol}><Text style={styles.tableHeader}>RRSO (%)</Text></View>
+        </View>
+        {calculations.map((calc, i) => (
+          <View style={styles.tableRow} key={i}>
+            <View style={styles.tableCol}><Text style={styles.tableCell}>{calc.getFormattedDate()}</Text></View>
+            <View style={styles.tableCol}><Text style={styles.tableCell}>{calc.name}</Text></View>
+            <View style={styles.tableCol}><Text style={styles.tableCell}>{calc.useGross ? calc.getGrossAmount().toFixed(2) : calc.netAmount.toFixed(2)}</Text></View>
+            <View style={styles.tableCol}><Text style={styles.tableCell}>{calc.useGross ? calc.getGrossInitialPayment().toFixed(2) : calc.initialPayment.toFixed(2)}</Text></View>
+            <View style={styles.tableCol}><Text style={styles.tableCell}>{calc.tenors}</Text></View>
+            <View style={styles.tableCol}><Text style={styles.tableCell}>{calc.useGross ? calc.getGrossEndValue().toFixed(2) : calc.endValue.toFixed(2)}</Text></View>
+            <View style={styles.tableCol}><Text style={styles.tableCell}>{calc.useGross ? calc.getGrossInstalment().toFixed(2) : calc.instalmentValue.toFixed(2)}</Text></View>
+            {isCompany && <View style={styles.tableCol}><Text style={styles.tableCell}>{calc.calculateDeductedInstalment()?.toFixed(2)}</Text></View>}
+            <View style={styles.tableCol}><Text style={styles.tableCell}>{calc.calculateTotalCost().toFixed(2)}</Text></View>
+            <View style={styles.tableCol}><Text style={styles.tableCell}>{calc.calculateRRSO().toFixed(2)}</Text></View>
+          </View>
+        ))}
+      </View>
+    </Page>
+  </Document>
+);
+
 function App() {
   const [calculations, setCalculations] = useState(() => {
     const saved = localStorage.getItem('leasingCalculations');
@@ -142,7 +187,7 @@ function App() {
     e.preventDefault();
     const formData = new FormData(e.target);
     const calculator = new LeasingCalculator(
-      formData.get('carName'),
+      formData.get('name'),
       parseFloat(formData.get('netAmount')),
       parseFloat(formData.get('initialPayment')),
       parseInt(formData.get('tenors')),
@@ -165,7 +210,7 @@ function App() {
 
   const handleReuse = (calc) => {
     if (formRef.current) {
-      formRef.current.carName.value = calc.carName;
+      formRef.current.name.value = calc.name;
       formRef.current.netAmount.value = calc.netAmount;
       formRef.current.initialPayment.value = calc.initialPayment;
       formRef.current.tenors.value = calc.tenors;
@@ -189,8 +234,8 @@ function App() {
       )}
       <form ref={formRef} onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Car Name</label>
-          <input name="carName" type="text" defaultValue="Tesla" required />
+          <label>Name</label>
+          <input name="name" type="text" defaultValue="Tesla" required />
         </div>
         <div className="tax-controls">
           <div className="control-row">
@@ -258,11 +303,29 @@ function App() {
       {calculations.length > 0 && (
         <div className="history">
           <h2>All Calculations</h2>
+          <div style={{ marginBottom: '20px' }}>
+            <PDFDownloadLink
+              document={<CalculationsPDF calculations={calculations} useGross={useGross} isCompany={isCompany} />}
+              fileName="leasing-calculations.pdf"
+              style={{
+                textDecoration: 'none',
+                padding: '10px',
+                color: '#4a4a4a',
+                backgroundColor: '#f0f0f0',
+                border: '1px solid #ddd',
+                borderRadius: '4px'
+              }}
+            >
+              {({ blob, url, loading, error }) =>
+                loading ? 'Generating PDF...' : 'Export to PDF'
+              }
+            </PDFDownloadLink>
+          </div>
           <table>
             <thead>
               <tr>
                 <th>Date</th>
-                <th>Car Name</th>
+                <th>Name</th>
                 <th>{useGross ? 'Gross Amount' : 'Net Amount'}</th>
                 <th>{useGross ? 'Gross Initial' : 'Initial Payment'}</th>
                 <th>Tenors</th>
@@ -279,16 +342,16 @@ function App() {
                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                 .map((calc, index) => (
                   <tr key={index}>
-                    <td>{calc.getFormattedDate()}</td>
-                    <td>{calc.carName}</td>
-                    <td>{calc.useGross ? calc.getGrossAmount().toFixed(2) : calc.netAmount.toFixed(2)}</td>
-                    <td>{calc.useGross ? calc.getGrossInitialPayment().toFixed(2) : calc.initialPayment.toFixed(2)}</td>
-                    <td>{calc.tenors}</td>
-                    <td>{calc.useGross ? calc.getGrossEndValue().toFixed(2) : calc.endValue.toFixed(2)}</td>
-                    <td>{calc.useGross ? calc.getGrossInstalment().toFixed(2) : calc.instalmentValue.toFixed(2)}</td>
-                    {isCompany && <td>{calc.calculateDeductedInstalment()?.toFixed(2)}</td>}
-                    <td>{calc.calculateTotalCost().toFixed(2)}</td>
-                    <td>{calc.calculateRRSO().toFixed(2)}</td>
+                    <td data-label="Date">{calc.getFormattedDate()}</td>
+                    <td data-label="Name">{calc.name}</td>
+                    <td data-label={useGross ? 'Gross Amount' : 'Net Amount'}>{calc.useGross ? calc.getGrossAmount().toFixed(2) : calc.netAmount.toFixed(2)}</td>
+                    <td data-label={useGross ? 'Gross Initial' : 'Initial Payment'}>{calc.useGross ? calc.getGrossInitialPayment().toFixed(2) : calc.initialPayment.toFixed(2)}</td>
+                    <td data-label="Tenors">{calc.tenors}</td>
+                    <td data-label={useGross ? 'Gross End Value' : 'End Value'}>{calc.useGross ? calc.getGrossEndValue().toFixed(2) : calc.endValue.toFixed(2)}</td>
+                    <td data-label={useGross ? 'Gross Instalment' : 'Instalment'}>{calc.useGross ? calc.getGrossInstalment().toFixed(2) : calc.instalmentValue.toFixed(2)}</td>
+                    {isCompany && <td data-label="Instalment After Deductions">{calc.calculateDeductedInstalment()?.toFixed(2)}</td>}
+                    <td data-label="Total Cost">{calc.calculateTotalCost().toFixed(2)}</td>
+                    <td data-label="RRSO (%)">{calc.calculateRRSO().toFixed(2)}</td>
                     <td className="actions">
                       <div className="action-buttons">
                         <button 

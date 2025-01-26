@@ -17,7 +17,10 @@
 <body>
     <h1>Leasing Calculator</h1>
     <form id="leasingForm">
-        <input type="text" id="carName" placeholder="Car Name" required>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Name" required>
+        </div>
         <input type="number" id="netAmount" placeholder="Net Amount" required>
         <input type="number" id="initialPayment" placeholder="Initial Payment" required>
         <input type="number" id="tenors" placeholder="Tenors" required>
@@ -31,14 +34,14 @@
     <script>
         document.getElementById('leasingForm').addEventListener('submit', function(event) {
             event.preventDefault();
-            const carName = document.getElementById('carName').value;
+            const name = document.getElementById('name').value;
             const netAmount = parseFloat(document.getElementById('netAmount').value);
             const initialPayment = parseFloat(document.getElementById('initialPayment').value);
             const tenors = parseInt(document.getElementById('tenors').value);
             const endValue = parseFloat(document.getElementById('endValue').value);
             const instalmentValue = parseFloat(document.getElementById('instalmentValue').value);
 
-            const calculator = new LeasingCalculator(carName, netAmount, initialPayment, tenors, endValue, instalmentValue);
+            const calculator = new LeasingCalculator(name, netAmount, initialPayment, tenors, endValue, instalmentValue);
             addToHistory(calculator);
             
             const totalCost = calculator.calculateTotalCost();
@@ -56,7 +59,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Car Name</th>
+                            <th>Name</th>
                             <th>Net Amount</th>
                             <th>Initial Payment</th>
                             <th>Tenors</th>
@@ -71,7 +74,7 @@
                             .sort((a, b) => a.calculateRRSO() - b.calculateRRSO())
                             .map(calc => `
                                 <tr>
-                                    <td>${calc.carName}</td>
+                                    <td>${calc.name}</td>
                                     <td>${calc.netAmount.toFixed(2)}</td>
                                     <td>${calc.initialPayment.toFixed(2)}</td>
                                     <td>${calc.tenors}</td>
