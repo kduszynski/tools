@@ -1,7 +1,21 @@
 export const CURRENT_VERSION = 1;
 
-export class LeasingCalculator {
+export class LeasingCalculation {
   static VERSION = CURRENT_VERSION;
+
+  static getDefaultCalculation() {
+    return new LeasingCalculation(
+      "New Vehicle",
+      70000,
+      0,
+      40,
+      700,
+      2000,
+      23,
+      false,
+      50
+    );
+  }
 
   constructor(name, netAmount, initialPayment, tenors, endValue, instalmentValue, vatRate = 0, isCompany = false, deductionPercentage = 50) {
     this.version = CURRENT_VERSION;

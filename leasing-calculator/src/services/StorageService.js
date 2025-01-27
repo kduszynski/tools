@@ -1,4 +1,4 @@
-import { CURRENT_VERSION, LeasingCalculator } from './LeasingCalculator';
+import { CURRENT_VERSION, LeasingCalculation } from './LeasingCalculation';
 
 export class StorageService {
   static STORAGE_KEY = 'leasingCalculations';
@@ -14,12 +14,12 @@ export class StorageService {
       if (storage.version !== CURRENT_VERSION) {
         const migratedCalculations = storage.calculations.map(calc => {
           const migrated = this.migrateCalculation(calc);
-          return Object.assign(new LeasingCalculator(), migrated);
+          return Object.assign(new LeasingCalculation(), migrated);
         });
         return migratedCalculations;
       }
       
-      return storage.calculations.map(calc => Object.assign(new LeasingCalculator(), calc));
+      return storage.calculations.map(calc => Object.assign(new LeasingCalculation(), calc));
     } catch (error) {
       console.error('Failed to load calculations:', error);
       return [];

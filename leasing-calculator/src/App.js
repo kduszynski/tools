@@ -3,7 +3,7 @@ import './App.css';
 import { StorageService } from './services/StorageService';
 import { CalculatorForm } from './components/CalculatorForm';
 import { CalculationsList } from './components/CalculationsList';
-import { LeasingCalculator } from './services/LeasingCalculator';
+import { LeasingCalculation } from './services/LeasingCalculation';
 
 function App() {
   const [calculations, setCalculations] = useState([]);
@@ -26,7 +26,7 @@ function App() {
   };
 
   const handleSubmit = (formData) => {
-    const calc = new LeasingCalculator(
+    const calc = new LeasingCalculation(
       formData.get('name'),
       parseFloat(formData.get('netAmount')),
       parseFloat(formData.get('initialPayment')),

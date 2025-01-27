@@ -1,7 +1,10 @@
 import React, { useEffect, useCallback } from 'react';
 import './CalculatorForm.css';
+import { LeasingCalculation } from '../services/LeasingCalculation';
 
 export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
+  const defaultCalc = LeasingCalculation.getDefaultCalculation();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(new FormData(e.target));
@@ -32,6 +35,11 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
     return () => form.removeEventListener('input', handleInput);
   }, [formRef, updateGrossValues]);
 
+  // Calculate gross values on mount
+  useEffect(() => {
+    updateGrossValues();
+  }, [updateGrossValues]);
+
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="calculator-form">
       <div className="form-grid">
@@ -46,6 +54,7 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
             name="name" 
             required 
             placeholder="e.g. Tesla Model 3"
+            defaultValue={defaultCalc.name}
           />
         </div>
 
@@ -63,6 +72,7 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
               required 
               placeholder="0.00"
               min="0"
+              defaultValue={defaultCalc.netAmount}
             />
           </div>
           <div className="form-group gross-value">
@@ -90,7 +100,7 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
               id="vatRate" 
               name="vatRate" 
               step="0.01" 
-              defaultValue="23" 
+              defaultValue={defaultCalc.vatRate}
               required 
               min="0"
               max="100"
@@ -112,6 +122,7 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
               required 
               placeholder="0.00"
               min="0"
+              defaultValue={defaultCalc.initialPayment}
             />
           </div>
           <div className="form-group gross-value">
@@ -144,6 +155,7 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
             placeholder="36"
             min="1"
             max="120"
+            defaultValue={defaultCalc.tenors}
           />
         </div>
 
@@ -161,6 +173,7 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
               required 
               placeholder="0.00"
               min="0"
+              defaultValue={defaultCalc.endValue}
             />
           </div>
           <div className="form-group gross-value">
@@ -194,6 +207,7 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
               required 
               placeholder="0.00"
               min="0"
+              defaultValue={defaultCalc.instalmentValue}
             />
           </div>
           <div className="form-group gross-value">
