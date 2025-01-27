@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import './App.css';
 import { StorageService } from './services/StorageService';
 import { CalculatorForm } from './components/CalculatorForm';
 import { CalculationsList } from './components/CalculationsList';
 import { LeasingCalculation } from './services/LeasingCalculation';
+import { LanguageSelector } from './components/LanguageSelector';
 
 function App() {
+  const { t } = useTranslation();
   const [calculations, setCalculations] = useState([]);
   const [isCompany, setIsCompany] = useState(false);
   const [notification, setNotification] = useState(null);
@@ -20,8 +23,8 @@ function App() {
     }
   }, []);
 
-  const showNotification = (message, type = 'success') => {
-    setNotification({ message, type });
+  const showNotification = (messageKey, type = 'success') => {
+    setNotification({ message: t(messageKey), type });
     setTimeout(() => setNotification(null), 3000);
   };
 
@@ -38,20 +41,17 @@ function App() {
       parseFloat(formData.get('deductionPercentage'))
     );
     setCalculations(prev => [...prev, calc]);
-    showNotification('Calculation completed and saved successfully!');
+    showNotification('app.notifications.calculationSaved');
   };
 
   const handleDelete = (createdAt) => {
     setCalculations(prev => prev.filter(calc => calc.createdAt !== createdAt));
-    showNotification('Calculation deleted');
+    showNotification('app.notifications.calculationDeleted');
   };
 
   const handleReuse = (calc) => {
     if (formRef.current) {
-      // First update the settings to ensure proper state
       setIsCompany(Boolean(calc.isCompany));
-
-      // Then update form values
       const form = formRef.current;
       form.name.value = calc.name;
       form.netAmount.value = calc.netAmount;
@@ -64,13 +64,12 @@ function App() {
         form.deductionPercentage.value = calc.deductionPercentage;
       }
 
-      // Trigger input events on all number inputs to force recalculation
       form.querySelectorAll('input[type="number"]').forEach(input => {
         const event = new Event('input', { bubbles: true });
         input.dispatchEvent(event);
       });
       
-      showNotification('Values loaded to form');
+      showNotification('app.notifications.valuesLoaded');
     }
   };
 
@@ -78,8 +77,10 @@ function App() {
     <div className="App">
       <header className="app-header">
         <span className="material-icons header-icon">calculate</span>
-        <h1>Leasing Calculator</h1>
+        <h1>{t('app.title')}</h1>
       </header>
+
+      <LanguageSelector />
       
       <div className="settings">
         <label>
@@ -89,28 +90,24 @@ function App() {
             checked={isCompany}
             onChange={(e) => setIsCompany(e.target.checked)}
           />
-          Company Calculation
+          {t('app.companyCalculation')}
         </label>
       </div>
-
+      <div className="calculator-container">
+        <CalculatorForm onSubmit={handleSubmit} isCompany={isCompany} formRef={formRef} />
+        {calculations.length > 0 && (
+          <CalculationsList
+            calculations={calculations}
+            onDelete={handleDelete}
+            onReuse={handleReuse}
+          />
+        )}
+      </div>
       {notification && (
         <div className={`notification ${notification.type}`}>
           {notification.message}
         </div>
       )}
-
-      <CalculatorForm
-        onSubmit={handleSubmit}
-        isCompany={isCompany}
-        formRef={formRef}
-      />
-
-      <CalculationsList
-        calculations={calculations}
-        isCompany={isCompany}
-        onDelete={handleDelete}
-        onReuse={handleReuse}
-      />
     </div>
   );
 }

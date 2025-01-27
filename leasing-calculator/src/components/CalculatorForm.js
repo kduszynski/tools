@@ -1,8 +1,10 @@
 import React, { useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import './CalculatorForm.css';
 import { LeasingCalculation } from '../services/LeasingCalculation';
 
 export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
+  const { t } = useTranslation();
   const defaultCalc = LeasingCalculation.getDefaultCalculation();
 
   const handleSubmit = (e) => {
@@ -46,7 +48,7 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
         <div className="form-group full-width">
           <label htmlFor="name">
             <span className="material-icons input-icon">directions_car</span>
-            Vehicle Name
+            {t('vehicle.name')}
           </label>
           <input 
             type="text" 
@@ -62,7 +64,7 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
           <div className="form-group">
             <label htmlFor="netAmount">
               <span className="material-icons input-icon">price_change</span>
-              Net Amount
+              {t('vehicle.netAmount')}
             </label>
             <input 
               type="number" 
@@ -78,7 +80,7 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
           <div className="form-group gross-value">
             <label>
               <span className="material-icons input-icon">euro</span>
-              Gross Amount
+              {t('vehicle.grossAmount')}
             </label>
             <input 
               type="number" 
@@ -93,7 +95,7 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
           <div className="form-group">
             <label htmlFor="vatRate">
               <span className="material-icons input-icon">percent</span>
-              VAT Rate (%)
+              {t('form.vatRate')}
             </label>
             <input 
               type="number" 
@@ -112,7 +114,7 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
           <div className="form-group">
             <label htmlFor="initialPayment">
               <span className="material-icons input-icon">payments</span>
-              Net Initial Payment
+              {t('payment.initialPayment')}
             </label>
             <input 
               type="number" 
@@ -128,7 +130,7 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
           <div className="form-group gross-value">
             <label>
               <span className="material-icons input-icon">euro</span>
-              Gross Initial Payment
+              {t('payment.grossInitialPayment')}
             </label>
             <input 
               type="number"
@@ -145,7 +147,7 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
         <div className="form-group full-width">
           <label htmlFor="tenors">
             <span className="material-icons input-icon">calendar_month</span>
-            Lease Duration (months)
+            {t('form.months')}
           </label>
           <input 
             type="number" 
@@ -163,7 +165,7 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
           <div className="form-group">
             <label htmlFor="endValue">
               <span className="material-icons input-icon">price_check</span>
-              Net End Value
+              {t('payment.endValue')}
             </label>
             <input 
               type="number" 
@@ -179,7 +181,7 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
           <div className="form-group gross-value">
             <label>
               <span className="material-icons input-icon">euro</span>
-              Gross End Value
+              {t('payment.grossEndValue')}
             </label>
             <input 
               type="number"
@@ -197,7 +199,7 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
           <div className="form-group">
             <label htmlFor="instalmentValue">
               <span className="material-icons input-icon">account_balance_wallet</span>
-              Net Monthly Instalment
+              {t('payment.instalment')}
             </label>
             <input 
               type="number" 
@@ -213,7 +215,7 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
           <div className="form-group gross-value">
             <label>
               <span className="material-icons input-icon">euro</span>
-              Gross Monthly Instalment
+              {t('payment.grossInstalment')}
             </label>
             <input 
               type="number"
@@ -249,7 +251,7 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
         <div className="form-actions">
           <button type="submit" className="submit-button">
             <span className="material-icons button-icon">calculate</span>
-            Calculate
+            {t('form.calculate')}
           </button>
         </div>
       </div>
