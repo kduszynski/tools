@@ -4,8 +4,17 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import { PDFReport } from './PDFReport';
 
 export const CalculationsList = ({ calculations, onDelete, onReuse }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const hasCompanyCalculations = calculations.some(calc => calc.isCompany);
+
+  const formatDateTime = (dateStr) => {
+    const date = new Date(dateStr);
+    const currentLocale = i18n.language;
+    return {
+      date: date.toLocaleDateString(currentLocale),
+      time: date.toLocaleTimeString(currentLocale)
+    };
+  };
 
   if (calculations.length === 0) {
     return null;
@@ -89,33 +98,41 @@ export const CalculationsList = ({ calculations, onDelete, onReuse }) => {
             </tr>
           </thead>
           <tbody>
-            {calculations.map((calc, index) => (
-              <tr key={index}>
-                <td data-label={t('calculations.table.date')}><span>{calc.getFormattedDate()}</span></td>
-                <td data-label={t('calculations.table.name')}><span>{calc.name}</span></td>
-                <td data-label={t('calculations.table.netAmount')}><span>{calc.netAmount.toFixed(2)}</span></td>
-                <td data-label={t('calculations.table.grossAmount')}><span>{calc.getGrossAmount().toFixed(2)}</span></td>
-                <td data-label={t('calculations.table.netMonthly')}><span>{calc.instalmentValue.toFixed(2)}</span></td>
-                <td data-label={t('calculations.table.grossMonthly')}><span>{calc.getGrossInstalment().toFixed(2)}</span></td>
-                <td data-label={t('calculations.table.tenors')}><span>{calc.tenors}</span></td>
-                <td data-label={t('calculations.table.rrso')}><span>{calc.calculateRRSO().toFixed(2)}%</span></td>
-                <td data-label={t('calculations.table.netInterest')}><span>{calc.calculateNetCost().toFixed(2)}</span></td>
-                <td data-label={t('calculations.table.grossInterest')}><span>{calc.calculateGrossCost().toFixed(2)}</span></td>
-                {hasCompanyCalculations && (
-                  <td data-label={t('calculations.table.deductedMonthly')}>
-                    <span>{calc.isCompany ? calc.calculateDeductedInstalment()?.toFixed(2) : '-'}</span>
+            {calculations.map((calc, index) => {
+              const { date, time } = formatDateTime(calc.createdAt);
+              return (
+                <tr key={index}>
+                  <td data-label={t('calculations.table.date')}>
+                    <span>{date}</span>
+                    <span>{time}</span>
                   </td>
-                )}
-                <td className="actions">
-                  <button onClick={() => onReuse(calc)} title={t('calculations.table.reuse')}>
-                    <span className="material-icons">replay</span>
-                  </button>
-                  <button onClick={() => onDelete(calc.createdAt)} title={t('calculations.table.delete')}>
-                    <span className="material-icons">delete</span>
-                  </button>
-                </td>
-              </tr>
-            ))}
+                  <td data-label={t('calculations.table.name')}><span>{calc.name}</span></td>
+                  <td data-label={t('calculations.table.netAmount')}><span>{calc.netAmount.toFixed(2)}</span></td>
+                  <td data-label={t('calculations.table.grossAmount')}><span>{calc.getGrossAmount().toFixed(2)}</span></td>
+                  <td data-label={t('calculations.table.netMonthly')}><span>{calc.instalmentValue.toFixed(2)}</span></td>
+                  <td data-label={t('calculations.table.grossMonthly')}><span>{calc.getGrossInstalment().toFixed(2)}</span></td>
+                  <td data-label={t('calculations.table.tenors')}><span>{calc.tenors}</span></td>
+                  <td data-label={t('calculations.table.rrso')}><span>{calc.calculateRRSO().toFixed(2)}%</span></td>
+                  <td data-label={t('calculations.table.netInterest')}><span>{calc.calculateNetCost().toFixed(2)}</span></td>
+                  <td data-label={t('calculations.table.grossInterest')}><span>{calc.calculateGrossCost().toFixed(2)}</span></td>
+                  {hasCompanyCalculations && (
+                    <td data-label={t('calculations.table.deductedMonthly')}>
+                      <span>{calc.isCompany ? calc.calculateDeductedInstalment()?.toFixed(2) : '-'}</span>
+                    </td>
+                  )}
+                  <td className="actions">
+                    <span>
+                    <button onClick={() => onReuse(calc)}>
+                      <span className="material-icons">replay</span>
+                    </button>
+                    <button onClick={() => onDelete(calc.createdAt)}>
+                      <span className="material-icons">delete</span>
+                    </button>
+                    </span>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
