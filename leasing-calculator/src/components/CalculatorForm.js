@@ -7,12 +7,36 @@ export const CalculatorForm = ({ onSubmit, formRef }) => {
   const { t } = useTranslation();
   const defaultCalc = LeasingCalculation.getDefaultCalculation();
   const [isCompany, setIsCompany] = useState(false);
+  const [calculationResult, setCalculationResult] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     formData.append('isCompany', isCompany);
-    onSubmit(formData);
+    const calc = new LeasingCalculation(
+      formData.get('name'),
+      parseFloat(formData.get('netAmount')),
+      parseFloat(formData.get('initialPayment')),
+      parseInt(formData.get('tenors')),
+      parseFloat(formData.get('endValue')),
+      parseFloat(formData.get('instalmentValue')),
+      parseFloat(formData.get('vatRate')),
+      formData.get('isCompany') === 'true',
+      parseFloat(formData.get('deductionPercentage')),
+      parseFloat(formData.get('taxRate'))
+    );
+    setCalculationResult(calc);
+  };
+
+  const handleSave = () => {
+    if (calculationResult) {
+      onSubmit(calculationResult);
+      setCalculationResult(null);
+    }
+  };
+
+  const handleDiscard = () => {
+    setCalculationResult(null);
   };
 
   const updateGrossValues = useCallback(() => {
@@ -291,6 +315,45 @@ export const CalculatorForm = ({ onSubmit, formRef }) => {
           </button>
         </div>
       </div>
+
+      {calculationResult && (
+        <div className="calculation-summary">
+          <h3>
+            <span className="material-icons">summarize</span>
+            {t('calculations.title')}
+          </h3>
+          <div className="summary-grid">
+            <div className="summary-item">
+              <label>{t('calculations.table.netInterest')}</label>
+              <span>{calculationResult.calculateNetCost().toFixed(2)}</span>
+            </div>
+            <div className="summary-item">
+              <label>{t('calculations.table.grossInterest')}</label>
+              <span>{calculationResult.calculateGrossCost().toFixed(2)}</span>
+            </div>
+            <div className="summary-item">
+              <label>{t('calculations.table.rrso')}</label>
+              <span>{calculationResult.calculateRRSO().toFixed(2)}%</span>
+            </div>
+            {calculationResult.isCompany && (
+              <div className="summary-item">
+                <label>{t('calculations.table.deductedMonthly')}</label>
+                <span>{calculationResult.calculateDeductedInstalment().toFixed(2)}</span>
+              </div>
+            )}
+          </div>
+          <div className="summary-actions">
+            <button onClick={handleDiscard} className="discard-button">
+              <span className="material-icons">close</span>
+              {t('form.discard')}
+            </button>
+            <button onClick={handleSave} className="save-button">
+              <span className="material-icons">save</span>
+              {t('form.save')}
+            </button>
+          </div>
+        </div>
+      )}
     </form>
   );
 }; 

@@ -36,6 +36,7 @@ i18n
             months: 'Months',
             calculate: 'Calculate',
             save: 'Save Calculation',
+            discard: 'Discard',
             deductionPercentage: 'VAT Deduction Percentage',
             taxRate: 'Income Tax Rate'
           },
@@ -92,6 +93,7 @@ i18n
             months: 'Liczba miesięcy',
             calculate: 'Oblicz',
             save: 'Zapisz kalkulację',
+            discard: 'Odrzuć',
             deductionPercentage: 'Procent odliczenia VAT',
             taxRate: 'Stawka podatku'
           },

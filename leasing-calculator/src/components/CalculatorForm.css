@@ -196,4 +196,91 @@ input:checked + .toggle-slider:before {
 
 .form-group .toggle-input {
   margin-top: 8px;
+}
+
+.calculation-summary {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+}
+
+.calculation-summary h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+  color: var(--accent);
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--bg-tertiary);
+  border-radius: var(--border-radius);
+}
+
+.summary-item label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.summary-item span {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.summary-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--bg-tertiary);
+}
+
+.summary-actions button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.summary-actions .save-button {
+  background: var(--accent);
+  color: white;
+}
+
+.summary-actions .discard-button {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.summary-actions button:hover {
+  transform: translateY(-1px);
+}
+
+.summary-actions .save-button:hover {
+  background: var(--accent-hover);
+}
+
+.summary-actions .discard-button:hover {
+  background: var(--error);
+  color: white;
 } 

@@ -29,19 +29,7 @@ function App() {
     setTimeout(() => setNotification(null), 3000);
   };
 
-  const handleSubmit = (formData) => {
-    const calc = new LeasingCalculation(
-      formData.get('name'),
-      parseFloat(formData.get('netAmount')),
-      parseFloat(formData.get('initialPayment')),
-      parseInt(formData.get('tenors')),
-      parseFloat(formData.get('endValue')),
-      parseFloat(formData.get('instalmentValue')),
-      parseFloat(formData.get('vatRate')),
-      formData.get('isCompany') === 'true',
-      parseFloat(formData.get('deductionPercentage')),
-      parseFloat(formData.get('taxRate'))
-    );
+  const handleSubmit = (calc) => {
     setCalculations(prev => [...prev, calc]);
     showNotification('app.notifications.calculationSaved');
   };
