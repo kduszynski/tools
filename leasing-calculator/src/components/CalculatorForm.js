@@ -69,6 +69,21 @@ export const CalculatorForm = ({ onSubmit, formRef }) => {
     updateGrossValues();
   }, [updateGrossValues]);
 
+  // Monitor form changes to discard calculation
+  useEffect(() => {
+    const form = formRef.current;
+    if (!form) return;
+
+    const handleChange = () => {
+      if (calculationResult) {
+        handleDiscard();
+      }
+    };
+
+    form.addEventListener('input', handleChange);
+    return () => form.removeEventListener('input', handleChange);
+  }, [formRef, calculationResult]);
+
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="calculator-form">
       <div className="form-grid">
@@ -320,7 +335,7 @@ export const CalculatorForm = ({ onSubmit, formRef }) => {
         <div className="calculation-summary">
           <h3>
             <span className="material-icons">summarize</span>
-            {t('calculations.title')}
+            {t('calculations.summary')}
           </h3>
           <div className="summary-grid">
             <div className="summary-item">

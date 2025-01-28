@@ -42,6 +42,7 @@ i18n
           },
           calculations: {
             title: 'Calculations',
+            summary: 'Current calculation',
             table: {
               date: 'Date',
               name: 'Name',
@@ -99,6 +100,7 @@ i18n
           },
           calculations: {
             title: 'Kalkulacje',
+            summary: 'Bieżąca kalkulacja',
             table: {
               date: 'Data',
               name: 'Nazwa',
