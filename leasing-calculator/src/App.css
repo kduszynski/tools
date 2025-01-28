@@ -169,8 +169,10 @@ h1 {
 }
 
 /* PDF Download Link styling */
-.calculations-list a {
-  display: inline-block;
+.calculations-list a.pdf-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   margin-bottom: 1rem;
   padding: 0.75rem 1.5rem;
   background: var(--accent);
@@ -181,7 +183,7 @@ h1 {
   transition: all 0.2s;
 }
 
-.calculations-list a:hover {
+.calculations-list a.pdf-button:hover {
   background: var(--accent-hover);
   transform: translateY(-1px);
 }

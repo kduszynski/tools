@@ -19,16 +19,15 @@ export const CalculationsList = ({ calculations, onDelete, onReuse }) => {
           {t('calculations.title')}
         </h2>
         <PDFDownloadLink
-          document={<PDFReport calculations={calculations} />}
+          document={<PDFReport calculations={calculations} isCompany={hasCompanyCalculations} />}
           fileName={t('calculations.pdf.filename')}
           className="pdf-button"
         >
           {({ loading }) => (
-            loading ? (
-              <span className="material-icons">hourglass_empty</span>
-            ) : (
-              <span className="material-icons">picture_as_pdf</span>
-            )
+            <>
+              <span className="material-icons">{loading ? 'hourglass_empty' : 'picture_as_pdf'}</span>
+              <span>{t('calculations.pdf.download')}</span>
+            </>
           )}
         </PDFDownloadLink>
       </div>

@@ -60,7 +60,8 @@ i18n
               delete: 'Delete calculation'
             },
             pdf: {
-              filename: 'leasing-calculations.pdf'
+              filename: 'leasing-calculations.pdf',
+              download: 'Download PDF'
             }
           }
         }
@@ -118,7 +119,8 @@ i18n
               delete: 'Usuń kalkulację'
             },
             pdf: {
-              filename: 'kalkulacje-leasingowe.pdf'
+              filename: 'kalkulacje-leasingowe.pdf',
+              download: 'Pobierz PDF'
             }
           }
         }
