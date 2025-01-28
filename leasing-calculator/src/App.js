@@ -23,6 +23,10 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    StorageService.saveCalculations(calculations);
+  }, [calculations]);
+
   const showNotification = (messageKey, type = 'success') => {
     setNotification({ message: t(messageKey), type });
     setTimeout(() => setNotification(null), 3000);
