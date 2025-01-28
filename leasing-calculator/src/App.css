@@ -21,14 +21,55 @@ body {
 .App {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   min-height: 100vh;
   background: var(--bg-primary);
 }
 
+.app-content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.calculator-container {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.language-selector-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
 @media (max-width: 768px) {
   .App {
-    padding: 1rem;
+    padding: 0.5rem;
+  }
+
+  .app-content {
+    padding: 0.5rem;
+  }
+
+  .calculator-container {
+    padding: 0;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    margin: 1rem 0;
+  }
+
+  .app-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .header-icon {
+    font-size: 2rem;
   }
 }
 
@@ -111,69 +152,146 @@ h1 {
 
 /* Responsive table styles */
 .calculations-list {
-  margin-top: 3rem;
-  overflow-x: auto;
+  margin-top: 2rem;
   background: var(--bg-secondary);
   border-radius: var(--border-radius);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   padding: 1rem;
 }
 
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.list-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  color: var(--accent);
+}
+
+.section-icon {
+  font-size: 1.5rem;
+  color: var(--accent);
+}
+
+.table-container {
+  width: 100%;
+}
+
 .calculations-list table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 600px;
   color: var(--text-primary);
+  table-layout: fixed;
 }
 
 .calculations-list th,
 .calculations-list td {
-  padding: 1rem;
-  text-align: left;
   border-bottom: 1px solid var(--bg-tertiary);
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .calculations-list th {
   background: var(--bg-tertiary);
   font-weight: 500;
   color: var(--accent);
+  white-space: normal;
+  line-height: 1.2;
+  height: auto;
+  padding: 1rem 0.5rem;
+  text-align: center;
+  vertical-align: middle;
+  min-height: 80px;
 }
+
+.calculations-list th span.material-icons {
+  display: block;
+  margin: 0 auto 0.5rem;
+  font-size: 1.4rem;
+}
+
+.calculations-list td {
+  white-space: nowrap;
+  text-align: right;
+  padding: 0.75rem 0.5rem;
+  vertical-align: middle;
+}
+
+.table-icon {
+  color: var(--accent);
+}
+
+/* Column widths */
+.calculations-list th:nth-child(1),
+.calculations-list td:nth-child(1) { width: 9%; } /* Date */
+
+.calculations-list th:nth-child(2),
+.calculations-list td:nth-child(2) { width: 13%; } /* Name */
+
+.calculations-list th:nth-child(3),
+.calculations-list td:nth-child(3),
+.calculations-list th:nth-child(4),
+.calculations-list td:nth-child(4) { width: 10%; } /* Net/Gross Amount */
+
+.calculations-list th:nth-child(5),
+.calculations-list td:nth-child(5),
+.calculations-list th:nth-child(6),
+.calculations-list td:nth-child(6) { width: 9%; } /* Monthly payments */
+
+.calculations-list th:nth-child(7),
+.calculations-list td:nth-child(7) { width: 6%; } /* Tenors */
+
+.calculations-list th:nth-child(8),
+.calculations-list td:nth-child(8) { width: 7%; } /* RRSO */
+
+.calculations-list th:nth-child(9),
+.calculations-list td:nth-child(9),
+.calculations-list th:nth-child(10),
+.calculations-list td:nth-child(10) { width: 10%; } /* Interest */
+
+.calculations-list th:nth-child(11),
+.calculations-list td:nth-child(11) { width: 9%; } /* Deducted */
+
+.calculations-list th:last-child,
+.calculations-list td:last-child { width: 8%; } /* Actions */
 
 .calculations-list tr:hover {
   background: var(--bg-tertiary);
 }
 
-.calculations-list button {
-  padding: 0.5rem 1rem;
-  margin: 0 0.25rem;
+.actions {
+  white-space: nowrap;
+  text-align: center !important;
+}
+
+.actions button {
+  background: transparent;
   border: none;
-  border-radius: 4px;
+  color: var(--text-secondary);
+  padding: 0.5rem;
   cursor: pointer;
-  font-weight: 500;
   transition: all 0.2s;
+  margin: 0 0.25rem;
 }
 
-.calculations-list button:first-child {
-  background: var(--accent);
-  color: white;
+.actions button:hover {
+  color: var(--accent);
+  transform: scale(1.1);
 }
 
-.calculations-list button:last-child {
-  background: var(--error);
-  color: white;
-}
-
-.calculations-list button:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-
-/* PDF Download Link styling */
-.calculations-list a.pdf-button {
+.pdf-button {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 1rem;
   padding: 0.75rem 1.5rem;
   background: var(--accent);
   color: white;
@@ -183,30 +301,97 @@ h1 {
   transition: all 0.2s;
 }
 
-.calculations-list a.pdf-button:hover {
+.pdf-button:hover {
   background: var(--accent-hover);
   transform: translateY(-1px);
 }
 
-/* Mobile Responsive Styles */
 @media screen and (max-width: 768px) {
   .calculations-list {
-    margin: 1rem -1rem;
+    margin: 1rem -0.5rem;
     border-radius: 0;
+    padding: 0.5rem;
   }
 
-  .calculations-list td::before {
-    color: var(--accent);
+  .list-header {
+    padding: 0 0.5rem;
   }
 
-  .calculations-list tr {
-    background: var(--bg-tertiary);
-    margin-bottom: 1rem;
-    border-radius: var(--border-radius);
+  .pdf-button {
+    width: 100%;
+    justify-content: center;
+    margin: 0.5rem 0;
+  }
+
+  .table-container {
+    overflow-x: visible;
+  }
+
+  .calculations-list table {
+    table-layout: auto;
+    min-width: auto;
+  }
+
+  .calculations-list th,
+  .calculations-list td {
+    width: auto !important;
+    font-size: 1rem;
+    white-space: normal;
   }
 
   .calculations-list td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
     border-bottom: 1px solid var(--bg-secondary);
+    text-align: right;
+    gap: 1rem;
+  }
+
+  .calculations-list td:last-child {
+    border-bottom: none;
+  }
+
+  .calculations-list td::before {
+    content: attr(data-label);
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-align: left;
+    flex: 1;
+  }
+
+  .calculations-list td > span,
+  .calculations-list td > div {
+    flex: 1;
+    text-align: right;
+  }
+
+  .calculations-list thead {
+    display: none;
+  }
+
+  .calculations-list td.actions {
+    justify-content: flex-end;
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--bg-secondary);
+    border-bottom: none;
+  }
+
+  .calculations-list td.actions::before {
+    display: none;
+  }
+
+  .actions button {
+    padding: 0.75rem;
+    margin: 0 0.25rem;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+  }
+
+  .actions button:hover {
+    background: var(--bg-primary);
   }
 }
 

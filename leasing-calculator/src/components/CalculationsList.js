@@ -36,34 +36,76 @@ export const CalculationsList = ({ calculations, onDelete, onReuse }) => {
         <table>
           <thead>
             <tr>
-              <th><span className="material-icons table-icon">event</span>{t('calculations.table.date')}</th>
-              <th><span className="material-icons table-icon">directions_car</span>{t('calculations.table.name')}</th>
-              <th><span className="material-icons table-icon">price_change</span>{t('calculations.table.netAmount')}</th>
-              <th><span className="material-icons table-icon">euro</span>{t('calculations.table.grossAmount')}</th>
-              <th><span className="material-icons table-icon">payments</span>{t('calculations.table.netMonthly')}</th>
-              <th><span className="material-icons table-icon">euro</span>{t('calculations.table.grossMonthly')}</th>
-              <th><span className="material-icons table-icon">calendar_month</span>{t('calculations.table.tenors')}</th>
-              <th><span className="material-icons table-icon">percent</span>{t('calculations.table.rrso')}</th>
-              <th><span className="material-icons table-icon">payments</span>{t('calculations.table.netInterest')}</th>
-              <th><span className="material-icons table-icon">euro</span>{t('calculations.table.grossInterest')}</th>
-              {hasCompanyCalculations && <th><span className="material-icons table-icon">savings</span>{t('calculations.table.deductedMonthly')}</th>}
-              <th><span className="material-icons table-icon">more_horiz</span>{t('calculations.table.actions')}</th>
+              <th>
+                <span className="material-icons table-icon">event</span>
+                {t('calculations.table.date')}
+              </th>
+              <th>
+                <span className="material-icons table-icon">directions_car</span>
+                {t('calculations.table.name')}
+              </th>
+              <th>
+                <span className="material-icons table-icon">price_change</span>
+                {t('calculations.table.netAmount')}
+              </th>
+              <th>
+                <span className="material-icons table-icon">euro</span>
+                {t('calculations.table.grossAmount')}
+              </th>
+              <th>
+                <span className="material-icons table-icon">payments</span>
+                {t('calculations.table.netMonthly')}
+              </th>
+              <th>
+                <span className="material-icons table-icon">euro</span>
+                {t('calculations.table.grossMonthly')}
+              </th>
+              <th>
+                <span className="material-icons table-icon">calendar_month</span>
+                {t('calculations.table.tenors')}
+              </th>
+              <th>
+                <span className="material-icons table-icon">percent</span>
+                {t('calculations.table.rrso')}
+              </th>
+              <th>
+                <span className="material-icons table-icon">payments</span>
+                {t('calculations.table.netInterest')}
+              </th>
+              <th>
+                <span className="material-icons table-icon">euro</span>
+                {t('calculations.table.grossInterest')}
+              </th>
+              {hasCompanyCalculations && (
+                <th>
+                  <span className="material-icons table-icon">savings</span>
+                  {t('calculations.table.deductedMonthly')}
+                </th>
+              )}
+              <th>
+                <span className="material-icons table-icon">more_horiz</span>
+                {t('calculations.table.actions')}
+              </th>
             </tr>
           </thead>
           <tbody>
             {calculations.map((calc, index) => (
               <tr key={index}>
-                <td>{calc.getFormattedDate()}</td>
-                <td>{calc.name}</td>
-                <td>{calc.netAmount.toFixed(2)}</td>
-                <td>{calc.getGrossAmount().toFixed(2)}</td>
-                <td>{calc.instalmentValue.toFixed(2)}</td>
-                <td>{calc.getGrossInstalment().toFixed(2)}</td>
-                <td>{calc.tenors}</td>
-                <td>{calc.calculateRRSO().toFixed(2)}%</td>
-                <td>{calc.calculateNetCost().toFixed(2)}</td>
-                <td>{calc.calculateGrossCost().toFixed(2)}</td>
-                {hasCompanyCalculations && <td>{calc.isCompany ? calc.calculateDeductedInstalment()?.toFixed(2) : '-'}</td>}
+                <td data-label={t('calculations.table.date')}><span>{calc.getFormattedDate()}</span></td>
+                <td data-label={t('calculations.table.name')}><span>{calc.name}</span></td>
+                <td data-label={t('calculations.table.netAmount')}><span>{calc.netAmount.toFixed(2)}</span></td>
+                <td data-label={t('calculations.table.grossAmount')}><span>{calc.getGrossAmount().toFixed(2)}</span></td>
+                <td data-label={t('calculations.table.netMonthly')}><span>{calc.instalmentValue.toFixed(2)}</span></td>
+                <td data-label={t('calculations.table.grossMonthly')}><span>{calc.getGrossInstalment().toFixed(2)}</span></td>
+                <td data-label={t('calculations.table.tenors')}><span>{calc.tenors}</span></td>
+                <td data-label={t('calculations.table.rrso')}><span>{calc.calculateRRSO().toFixed(2)}%</span></td>
+                <td data-label={t('calculations.table.netInterest')}><span>{calc.calculateNetCost().toFixed(2)}</span></td>
+                <td data-label={t('calculations.table.grossInterest')}><span>{calc.calculateGrossCost().toFixed(2)}</span></td>
+                {hasCompanyCalculations && (
+                  <td data-label={t('calculations.table.deductedMonthly')}>
+                    <span>{calc.isCompany ? calc.calculateDeductedInstalment()?.toFixed(2) : '-'}</span>
+                  </td>
+                )}
                 <td className="actions">
                   <button onClick={() => onReuse(calc)} title={t('calculations.table.reuse')}>
                     <span className="material-icons">replay</span>

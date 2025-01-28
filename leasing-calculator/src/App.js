@@ -4,7 +4,6 @@ import './App.css';
 import { StorageService } from './services/StorageService';
 import { CalculatorForm } from './components/CalculatorForm';
 import { CalculationsList } from './components/CalculationsList';
-import { LeasingCalculation } from './services/LeasingCalculation';
 import { LanguageSelector } from './components/LanguageSelector';
 
 function App() {
@@ -64,22 +63,26 @@ function App() {
 
   return (
     <div className="App">
-      <header className="app-header">
-        <span className="material-icons header-icon">calculate</span>
-        <h1>{t('app.title')}</h1>
-      </header>
+      <div className="app-content">
+        <header className="app-header">
+          <span className="material-icons header-icon">calculate</span>
+          <h1>{t('app.title')}</h1>
+        </header>
 
-      <LanguageSelector />
-      
-      <div className="calculator-container">
-        <CalculatorForm onSubmit={handleSubmit} formRef={formRef} />
-        {calculations.length > 0 && (
-          <CalculationsList
-            calculations={calculations}
-            onDelete={handleDelete}
-            onReuse={handleReuse}
-          />
-        )}
+        <div className="language-selector-container">
+          <LanguageSelector />
+        </div>
+        
+        <main className="calculator-container">
+          <CalculatorForm onSubmit={handleSubmit} formRef={formRef} />
+          {calculations.length > 0 && (
+            <CalculationsList
+              calculations={calculations}
+              onDelete={handleDelete}
+              onReuse={handleReuse}
+            />
+          )}
+        </main>
       </div>
       {notification && (
         <div className={`notification ${notification.type}`}>
