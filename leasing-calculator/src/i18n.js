@@ -40,7 +40,7 @@ i18n
             taxRate: 'Income Tax Rate'
           },
           calculations: {
-            title: 'Previous Calculations',
+            title: 'Calculations',
             table: {
               date: 'Date',
               name: 'Name',
@@ -96,7 +96,7 @@ i18n
             taxRate: 'Stawka podatku'
           },
           calculations: {
-            title: 'Poprzednie kalkulacje',
+            title: 'Kalkulacje',
             table: {
               date: 'Data',
               name: 'Nazwa',

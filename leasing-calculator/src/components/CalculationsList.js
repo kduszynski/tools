@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { PDFReport } from './PDFReport';
 
-export const CalculationsList = ({ calculations, isCompany, onDelete, onReuse }) => {
+export const CalculationsList = ({ calculations, onDelete, onReuse }) => {
   const { t } = useTranslation();
+  const hasCompanyCalculations = calculations.some(calc => calc.isCompany);
 
   if (calculations.length === 0) {
     return null;
@@ -18,7 +19,7 @@ export const CalculationsList = ({ calculations, isCompany, onDelete, onReuse })
           {t('calculations.title')}
         </h2>
         <PDFDownloadLink
-          document={<PDFReport calculations={calculations} isCompany={isCompany} />}
+          document={<PDFReport calculations={calculations} />}
           fileName={t('calculations.pdf.filename')}
           className="pdf-button"
         >
@@ -46,24 +47,24 @@ export const CalculationsList = ({ calculations, isCompany, onDelete, onReuse })
               <th><span className="material-icons table-icon">percent</span>{t('calculations.table.rrso')}</th>
               <th><span className="material-icons table-icon">payments</span>{t('calculations.table.netInterest')}</th>
               <th><span className="material-icons table-icon">euro</span>{t('calculations.table.grossInterest')}</th>
-              {isCompany && <th><span className="material-icons table-icon">savings</span>{t('calculations.table.deductedMonthly')}</th>}
+              {hasCompanyCalculations && <th><span className="material-icons table-icon">savings</span>{t('calculations.table.deductedMonthly')}</th>}
               <th><span className="material-icons table-icon">more_horiz</span>{t('calculations.table.actions')}</th>
             </tr>
           </thead>
           <tbody>
             {calculations.map((calc, index) => (
               <tr key={index}>
-                <td>{new Date(calc.createdAt).toLocaleDateString()}</td>
+                <td>{calc.getFormattedDate()}</td>
                 <td>{calc.name}</td>
                 <td>{calc.netAmount.toFixed(2)}</td>
-                <td>{calc.getGrossValue(calc.netAmount).toFixed(2)}</td>
+                <td>{calc.getGrossAmount().toFixed(2)}</td>
                 <td>{calc.instalmentValue.toFixed(2)}</td>
-                <td>{calc.getGrossValue(calc.instalmentValue).toFixed(2)}</td>
+                <td>{calc.getGrossInstalment().toFixed(2)}</td>
                 <td>{calc.tenors}</td>
                 <td>{calc.calculateRRSO().toFixed(2)}%</td>
                 <td>{calc.calculateNetCost().toFixed(2)}</td>
                 <td>{calc.calculateGrossCost().toFixed(2)}</td>
-                {isCompany && <td>{calc.calculateDeductedInstalment().toFixed(2)}</td>}
+                {hasCompanyCalculations && <td>{calc.isCompany ? calc.calculateDeductedInstalment()?.toFixed(2) : '-'}</td>}
                 <td className="actions">
                   <button onClick={() => onReuse(calc)} title={t('calculations.table.reuse')}>
                     <span className="material-icons">replay</span>
