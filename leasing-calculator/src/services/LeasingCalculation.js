@@ -35,18 +35,8 @@ export class LeasingCalculation {
     return netValue * (1 + this.vatRate / 100);
   }
 
-  calculateNetTotalCost() {
-    return this.initialPayment + (this.instalmentValue * this.tenors) + this.endValue;
-  }
-
-  calculateTotalCost() {
-    const totalNet = this.calculateNetTotalCost();
-    return this.getGrossValue(totalNet);
-  }
-
   calculateRRSO() {
-    const totalInterest = this.calculateTotalCost() - this.getGrossValue(this.netAmount);
-    return (totalInterest / this.getGrossValue(this.netAmount)) * 100;
+    return (this.calculateNetCost() / this.netAmount) * 100
   }
 
   getGrossAmount() {
@@ -63,6 +53,14 @@ export class LeasingCalculation {
 
   getGrossEndValue() {
     return this.getGrossValue(this.endValue);
+  }
+
+  calculateNetCost() {
+    return this.initialPayment + (this.instalmentValue * this.tenors) + this.endValue - this.netAmount;
+  }
+
+  calculateGrossCost() {
+    return this.getGrossInitialPayment() + (this.getGrossInstalment() * this.tenors) + this.getGrossEndValue() - this.getGrossValue(this.netAmount);
   }
 
   calculateDeductedInstalment() {

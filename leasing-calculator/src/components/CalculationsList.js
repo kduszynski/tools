@@ -44,6 +44,8 @@ export const CalculationsList = ({ calculations, isCompany, onDelete, onReuse })
               <th><span className="material-icons table-icon">euro</span>{t('calculations.table.grossMonthly')}</th>
               <th><span className="material-icons table-icon">calendar_month</span>{t('calculations.table.tenors')}</th>
               <th><span className="material-icons table-icon">percent</span>{t('calculations.table.rrso')}</th>
+              <th><span className="material-icons table-icon">payments</span>{t('calculations.table.netInterest')}</th>
+              <th><span className="material-icons table-icon">euro</span>{t('calculations.table.grossInterest')}</th>
               {isCompany && <th><span className="material-icons table-icon">savings</span>{t('calculations.table.deductedMonthly')}</th>}
               <th><span className="material-icons table-icon">more_horiz</span>{t('calculations.table.actions')}</th>
             </tr>
@@ -59,6 +61,8 @@ export const CalculationsList = ({ calculations, isCompany, onDelete, onReuse })
                 <td>{calc.getGrossValue(calc.instalmentValue).toFixed(2)}</td>
                 <td>{calc.tenors}</td>
                 <td>{calc.calculateRRSO().toFixed(2)}%</td>
+                <td>{calc.calculateNetCost().toFixed(2)}</td>
+                <td>{calc.calculateGrossCost().toFixed(2)}</td>
                 {isCompany && <td>{calc.calculateDeductedInstalment().toFixed(2)}</td>}
                 <td className="actions">
                   <button onClick={() => onReuse(calc)} title={t('calculations.table.reuse')}>
