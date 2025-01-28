@@ -10,16 +10,13 @@ import { LanguageSelector } from './components/LanguageSelector';
 function App() {
   const { t } = useTranslation();
   const [calculations, setCalculations] = useState([]);
-  const [isCompany, setIsCompany] = useState(false);
   const [notification, setNotification] = useState(null);
   const formRef = useRef(null);
 
   useEffect(() => {
     const savedCalcs = StorageService.loadCalculations();
     if (savedCalcs.length > 0) {
-      const calc = savedCalcs[0];
       setCalculations(savedCalcs);
-      setIsCompany(Boolean(calc.isCompany));
     }
   }, []);
 
@@ -41,8 +38,9 @@ function App() {
       parseFloat(formData.get('endValue')),
       parseFloat(formData.get('instalmentValue')),
       parseFloat(formData.get('vatRate')),
-      isCompany,
-      parseFloat(formData.get('deductionPercentage'))
+      formData.get('isCompany') === 'true',
+      parseFloat(formData.get('deductionPercentage')),
+      parseFloat(formData.get('taxRate'))
     );
     setCalculations(prev => [...prev, calc]);
     showNotification('app.notifications.calculationSaved');
@@ -55,7 +53,6 @@ function App() {
 
   const handleReuse = (calc) => {
     if (formRef.current) {
-      setIsCompany(Boolean(calc.isCompany));
       const form = formRef.current;
       form.name.value = calc.name;
       form.netAmount.value = calc.netAmount;
@@ -64,7 +61,7 @@ function App() {
       form.endValue.value = calc.endValue;
       form.instalmentValue.value = calc.instalmentValue;
       
-      if (calc.isCompany && form.deductionPercentage) {
+      if (form.deductionPercentage) {
         form.deductionPercentage.value = calc.deductionPercentage;
       }
 
@@ -86,19 +83,8 @@ function App() {
 
       <LanguageSelector />
       
-      <div className="settings">
-        <label>
-          <span className="material-icons settings-icon">business</span>
-          <input
-            type="checkbox"
-            checked={isCompany}
-            onChange={(e) => setIsCompany(e.target.checked)}
-          />
-          {t('app.companyCalculation')}
-        </label>
-      </div>
       <div className="calculator-container">
-        <CalculatorForm onSubmit={handleSubmit} isCompany={isCompany} formRef={formRef} />
+        <CalculatorForm onSubmit={handleSubmit} formRef={formRef} />
         {calculations.length > 0 && (
           <CalculationsList
             calculations={calculations}

@@ -1,15 +1,18 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import './CalculatorForm.css';
 import { LeasingCalculation } from '../services/LeasingCalculation';
 
-export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
+export const CalculatorForm = ({ onSubmit, formRef }) => {
   const { t } = useTranslation();
   const defaultCalc = LeasingCalculation.getDefaultCalculation();
+  const [isCompany, setIsCompany] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(new FormData(e.target));
+    const formData = new FormData(e.target);
+    formData.append('isCompany', isCompany);
+    onSubmit(formData);
   };
 
   const updateGrossValues = useCallback(() => {
@@ -229,23 +232,56 @@ export const CalculatorForm = ({ onSubmit, isCompany, formRef }) => {
           </div>
         </div>
 
-        {isCompany && (
-          <div className="form-group">
-            <label htmlFor="deductionPercentage">
-              <span className="material-icons input-icon">savings</span>
-              Deduction Percentage
-            </label>
-            <input 
-              type="number" 
-              id="deductionPercentage" 
-              name="deductionPercentage" 
-              step="1" 
-              defaultValue="50" 
-              required 
-              min="0"
-              max="100"
+        <div className="form-group">
+          <label htmlFor="isCompany">
+            <span className="material-icons input-icon">business</span>
+            {t('app.companyCalculation')}
+          </label>
+          <div className="toggle-input">
+            <input
+              type="checkbox"
+              id="isCompany"
+              checked={isCompany}
+              onChange={(e) => setIsCompany(e.target.checked)}
             />
+            <span className="toggle-slider"></span>
           </div>
+        </div>
+
+        {isCompany && (
+          <>
+            <div className="form-group">
+              <label htmlFor="deductionPercentage">
+                <span className="material-icons input-icon">savings</span>
+                {t('form.deductionPercentage')}
+              </label>
+              <input 
+                type="number" 
+                id="deductionPercentage" 
+                name="deductionPercentage" 
+                step="1" 
+                defaultValue="50" 
+                required 
+                min="0"
+                max="100"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="taxRate">
+                <span className="material-icons input-icon">percent</span>
+                {t('form.taxRate')}
+              </label>
+              <input 
+                type="number" 
+                id="taxRate" 
+                name="taxRate" 
+                step="0.1" 
+                defaultValue="19" 
+                required 
+                min="0"
+              />
+            </div>
+          </>
         )}
 
         <div className="form-actions">

@@ -35,7 +35,9 @@ i18n
             vatRate: 'VAT Rate',
             months: 'Months',
             calculate: 'Calculate',
-            save: 'Save Calculation'
+            save: 'Save Calculation',
+            deductionPercentage: 'VAT Deduction Percentage',
+            taxRate: 'Income Tax Rate'
           },
           calculations: {
             title: 'Previous Calculations',
@@ -89,7 +91,9 @@ i18n
             vatRate: 'Stawka VAT',
             months: 'Liczba miesięcy',
             calculate: 'Oblicz',
-            save: 'Zapisz kalkulację'
+            save: 'Zapisz kalkulację',
+            deductionPercentage: 'Procent odliczenia VAT',
+            taxRate: 'Stawka podatku'
           },
           calculations: {
             title: 'Poprzednie kalkulacje',

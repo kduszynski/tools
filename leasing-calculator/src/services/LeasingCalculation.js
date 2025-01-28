@@ -17,7 +17,7 @@ export class LeasingCalculation {
     );
   }
 
-  constructor(name, netAmount, initialPayment, tenors, endValue, instalmentValue, vatRate = 0, isCompany = false, deductionPercentage = 50) {
+  constructor(name, netAmount, initialPayment, tenors, endValue, instalmentValue, vatRate = 0, isCompany = false, deductionPercentage = 50, taxRate = 19) {
     this.version = CURRENT_VERSION;
     this.name = name;
     this.netAmount = netAmount;
@@ -28,6 +28,7 @@ export class LeasingCalculation {
     this.vatRate = vatRate;
     this.isCompany = isCompany;
     this.deductionPercentage = deductionPercentage;
+    this.taxRate = taxRate;
     this.createdAt = Date.now();
   }
 
@@ -70,7 +71,7 @@ export class LeasingCalculation {
     const vatPart = grossInstalment - this.instalmentValue;
     const deductionRate = this.deductionPercentage / 100;
     
-    const incomeTaxDeduction = this.instalmentValue * deductionRate * 0.19;
+    const incomeTaxDeduction = this.instalmentValue * (this.taxRate / 100);
     const vatDeduction = vatPart * deductionRate;
     
     return grossInstalment - (incomeTaxDeduction + vatDeduction);
